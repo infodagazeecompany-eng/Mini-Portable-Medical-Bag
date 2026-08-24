@@ -34,7 +34,14 @@ onsubmit="return submitOrder(this);">
 <label class="deal"><input type="radio" name="deal" value="Pack of 2 - Rs. 2,000" checked>🔥 Pack 2<br>Rs. 2,000<br><small>BEST VALUE</small></label>
 <label class="deal"><input type="radio" name="deal" value="Pack of 3 - Rs. 2,500">💥 Pack 3<br>Rs. 2,500<br><small>BEST DEAL</small></label></div>
 <label>Full Name</label><input id="name" name="name" required placeholder="Enter your name"><label>Phone Number</label><input id="phone" name="phone" required type="tel" placeholder="03XXXXXXXXX">
-<label>House / Street Address</label><textarea id="address" name="address" required placeholder="Complete delivery address"></textarea><label>Near Famous Place / Landmark</label><input id="landmark" name="landmark" required placeholder="e.g. Near ABC Market"><label>City</label><input id="city" name="city" required placeholder="Enter city"><br><button type="submit" class="btn" id="placeOrderBtn">PLACE ORDER</button></form></div></div></section>
+<label>House / Street Address</label><textarea id="address" name="address" required placeholder="Complete delivery address"></textarea><label>Near Famous Place / Landmark</label><input id="landmark" name="landmark" required placeholder="e.g. Near ABC Market"><label>City</label><input id="city" name="city" required placeholder="Enter city"><br><div id="orderSuccessMessage" style="
+  display:none;margin:15px 0;padding:14px 16px;border-radius:12px;
+  background:#eaf9ef;border:1px solid #b8e8c6;color:#16763a;
+  text-align:center;font-weight:800;font-size:16px;">
+  ✅ Order Placed Successfully!<br>
+  <span style="font-size:14px;font-weight:600;">Thank you! Your order has been submitted.</span>
+</div>
+<button type="submit" class="btn" id="placeOrderBtn">PLACE ORDER</button></form></div></div></section>
 <section class="section" id="reviews">
 <div class="wrap">
 <h2>⭐ What Customers Love</h2>
@@ -55,6 +62,7 @@ onsubmit="return submitOrder(this);">
 (function () {
   const form = document.getElementById("form");
   const button = document.getElementById("placeOrderBtn");
+  const message = document.getElementById("orderSuccessMessage");
   const modal = document.getElementById("successModal");
   const close = document.getElementById("successClose");
   const scriptUrl = "https://script.google.com/macros/s/AKfycbwc1HcngUljWIrPmQ_hanQlzDz61u0LWh3eLFX2wapczv-4o1GBJenNiMzNIbqB3aW0BA/exec";
@@ -82,6 +90,7 @@ onsubmit="return submitOrder(this);">
       return;
     }
 
+    message.style.display = "none";
     button.disabled = true;
     button.textContent = "SUBMITTING ORDER...";
 
@@ -101,27 +110,35 @@ onsubmit="return submitOrder(this);">
       body: data
     })
     .then(function () {
-      // The request has completed. Show an obvious confirmation screen.
-      modal.style.display = "flex";
-      document.body.style.overflow = "hidden";
-      form.reset();
-      document.querySelector('input[name="deal"][value="Pack of 2 - Rs. 2,000"]').checked = true;
-      document.getElementById("orderPrice").value = "2000";
+      message.style.display = "block";
+      message.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      button.textContent = "ORDER PLACED ✓";
+
+      // Reset the form and button automatically after 5 seconds.
+      setTimeout(function () {
+        form.reset();
+        document.querySelector('input[name="deal"][value="Pack of 2 - Rs. 2,000"]').checked = true;
+        document.getElementById("orderPrice").value = "2000";
+        message.style.display = "none";
+        button.disabled = false;
+        button.textContent = "PLACE ORDER";
+      }, 5000);
     })
     .catch(function (error) {
       console.error(error);
-      alert("Order submit nahi ho saka. Please try again.");
-    })
-    .finally(function () {
       button.disabled = false;
       button.textContent = "PLACE ORDER";
+      alert("Order submit nahi ho saka. Please try again.");
     });
   });
 
-  close.addEventListener("click", function () {
-    modal.style.display = "none";
-    document.body.style.overflow = "";
-  });
+  if (close && modal) {
+    close.addEventListener("click", function () {
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+    });
+  }
 })();
 </script>
 
