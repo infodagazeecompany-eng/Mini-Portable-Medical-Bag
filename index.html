@@ -55,6 +55,8 @@ onsubmit="return submitOrder(this);">
 (function () {
   const form = document.getElementById("form");
   const button = document.getElementById("placeOrderBtn");
+  const modal = document.getElementById("successModal");
+  const close = document.getElementById("successClose");
   const scriptUrl = "https://script.google.com/macros/s/AKfycbwc1HcngUljWIrPmQ_hanQlzDz61u0LWh3eLFX2wapczv-4o1GBJenNiMzNIbqB3aW0BA/exec";
 
   document.querySelectorAll('input[name="deal"]').forEach(function (radio) {
@@ -81,7 +83,7 @@ onsubmit="return submitOrder(this);">
     }
 
     button.disabled = true;
-    button.textContent = "ORDER PLACING...";
+    button.textContent = "SUBMITTING ORDER...";
 
     const data = new URLSearchParams();
     data.append("product", "Mini Portable Medical Bag");
@@ -99,7 +101,9 @@ onsubmit="return submitOrder(this);">
       body: data
     })
     .then(function () {
-      alert("Order placed successfully! Thank you.");
+      // The request has completed. Show an obvious confirmation screen.
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
       form.reset();
       document.querySelector('input[name="deal"][value="Pack of 2 - Rs. 2,000"]').checked = true;
       document.getElementById("orderPrice").value = "2000";
@@ -113,6 +117,36 @@ onsubmit="return submitOrder(this);">
       button.textContent = "PLACE ORDER";
     });
   });
+
+  close.addEventListener("click", function () {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  });
 })();
 </script>
+
+<div id="successModal" style="
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.65);align-items:center;justify-content:center;
+  padding:20px;">
+  <div style="
+    width:min(430px,100%);background:#fff;border-radius:24px;
+    padding:34px 25px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+    <div style="
+      width:76px;height:76px;border-radius:50%;background:#e9f9ef;
+      color:#16823b;font-size:42px;line-height:76px;margin:0 auto 18px;">✓</div>
+    <h2 style="margin:0 0 10px;font-size:28px;color:#172033;">Order Placed Successfully!</h2>
+    <p style="margin:0 0 8px;color:#555;font-size:16px;">
+      Thank you! Your order has been submitted successfully.
+    </p>
+    <p style="margin:0 0 22px;color:#16823b;font-weight:700;">
+      Our team will contact you shortly to confirm your order.
+    </p>
+    <button type="button" id="successClose" style="
+      width:100%;border:0;border-radius:11px;background:#d71920;
+      color:#fff;padding:15px;font-size:17px;font-weight:800;cursor:pointer;">
+      DONE
+    </button>
+  </div>
+</div>
 </body></html>
