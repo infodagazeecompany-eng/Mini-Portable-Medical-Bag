@@ -53,16 +53,15 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   if (deal.includes("1,500")) price = "1500";
   else if (deal.includes("2,000")) price = "2000";
 
-  const order = {
-    product: "Mini Portable Medical Bag",
-    deal: deal,
-    name: document.getElementById('name').value.trim(),
-    phone: document.getElementById('phone').value.trim(),
-    address: document.getElementById('address').value.trim(),
-    landmark: document.getElementById('landmark').value.trim(),
-    city: document.getElementById('city').value.trim(),
-    price: price
-  };
+  const order = new URLSearchParams();
+  order.append("product", "Mini Portable Medical Bag");
+  order.append("deal", deal);
+  order.append("name", document.getElementById('name').value.trim());
+  order.append("phone", document.getElementById('phone').value.trim());
+  order.append("address", document.getElementById('address').value.trim());
+  order.append("landmark", document.getElementById('landmark').value.trim());
+  order.append("city", document.getElementById('city').value.trim());
+  order.append("price", price);
 
   const button = this.querySelector('button[type="submit"]');
   button.disabled = true;
@@ -72,13 +71,10 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     await fetch("https://script.google.com/macros/s/AKfycbwc1HcngUljWIrPmQ_hanQlzDz61u0LWh3eLFX2wapczv-4o1GBJenNiMzNIbqB3aW0BA/exec", {
       method: "POST",
       mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify(order)
+      body: order
     });
 
-    alert("Order placed successfully! Thank you.");
+    alert("Order placed successfully!");
     this.reset();
     document.querySelector('input[name="deal"][value="Pack of 2 - Rs. 2,000"]').checked = true;
   } catch (error) {
@@ -88,6 +84,5 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     button.disabled = false;
     button.textContent = "PLACE ORDER";
   }
-});
-</script>
+});</script>
 </body></html>
