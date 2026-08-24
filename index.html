@@ -27,12 +27,14 @@ method="POST"
 action="https://script.google.com/macros/s/AKfycbwc1HcngUljWIrPmQ_hanQlzDz61u0LWh3eLFX2wapczv-4o1GBJenNiMzNIbqB3aW0BA/exec"
 target="orderFrame"
 onsubmit="return submitOrder(this);">
-<iframe name="orderFrame" id="orderFrame" style="display:none;"></iframe><label>Choose Your Deal</label><div class="deals">
+<iframe name="orderFrame" id="orderFrame" style="display:none;"></iframe>
+<input type="hidden" name="product" value="Mini Portable Medical Bag">
+<input type="hidden" name="price" id="orderPrice" value="2000"><label>Choose Your Deal</label><div class="deals">
 <label class="deal"><input type="radio" name="deal" value="Pack of 1 - Rs. 1,500 + Free Delivery">Pack 1<br>Rs. 1,500<br><small>FREE DELIVERY</small></label>
 <label class="deal"><input type="radio" name="deal" value="Pack of 2 - Rs. 2,000" checked>🔥 Pack 2<br>Rs. 2,000<br><small>BEST VALUE</small></label>
 <label class="deal"><input type="radio" name="deal" value="Pack of 3 - Rs. 2,500">💥 Pack 3<br>Rs. 2,500<br><small>BEST DEAL</small></label></div>
-<label>Full Name</label><input id="name" required placeholder="Enter your name"><label>Phone Number</label><input id="phone" required type="tel" placeholder="03XXXXXXXXX">
-<label>House / Street Address</label><textarea id="address" required placeholder="Complete delivery address"></textarea><label>Near Famous Place / Landmark</label><input id="landmark" required placeholder="e.g. Near ABC Market"><label>City</label><input id="city" required placeholder="Enter city"><br><button class="btn">PLACE ORDER</button></form></div></div></section>
+<label>Full Name</label><input id="name" name="name" required placeholder="Enter your name"><label>Phone Number</label><input id="phone" name="phone" required type="tel" placeholder="03XXXXXXXXX">
+<label>House / Street Address</label><textarea id="address" name="address" required placeholder="Complete delivery address"></textarea><label>Near Famous Place / Landmark</label><input id="landmark" name="landmark" required placeholder="e.g. Near ABC Market"><label>City</label><input id="city" name="city" required placeholder="Enter city"><br><button class="btn">PLACE ORDER</button></form></div></div></section>
 <section class="section" id="reviews">
 <div class="wrap">
 <h2>⭐ What Customers Love</h2>
@@ -65,5 +67,14 @@ function submitOrder(form) {
 
   return true;
 }
+
+document.querySelectorAll('input[name="deal"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    var priceField = document.getElementById('orderPrice');
+    if (this.value.includes("1,500")) priceField.value = "1500";
+    else if (this.value.includes("2,000")) priceField.value = "2000";
+    else priceField.value = "2500";
+  });
+});
 </script>
 </body></html>
