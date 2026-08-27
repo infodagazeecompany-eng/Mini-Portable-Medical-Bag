@@ -149,6 +149,53 @@ fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=987069024389586&ev=PageView&noscript=1"/></noscript>
+
+<style id="deal-fix">
+/* Deal selector: clean 3-card layout, one custom radio only */
+.deals{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+.deal{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:20px 64px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-height:104px!important;
+  padding:12px!important;
+  overflow:hidden!important;
+}
+.deal input[type="radio"]{
+  position:absolute!important;
+  opacity:0!important;
+  width:1px!important;
+  height:1px!important;
+  pointer-events:none!important;
+}
+.deal .radio{width:18px!important;height:18px!important;flex:0 0 18px!important}
+.deal img{
+  width:64px!important;height:70px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:9px!important;
+  background:#fff!important;
+}
+.deal b{display:block!important;font-size:13px!important;line-height:1.15!important;white-space:nowrap!important}
+.deal small{font-size:9px!important;line-height:1.25!important}
+.deal-price{font-size:17px!important;margin-top:5px!important;white-space:nowrap!important}
+.badge{font-size:6px!important;padding:3px 6px!important;z-index:2!important}
+.deal.active{transform:none!important}
+@media(max-width:760px){
+ .deals{grid-template-columns:1fr!important;gap:9px!important}
+ .deal{
+   grid-template-columns:20px 58px minmax(0,1fr)!important;
+   min-height:78px!important;
+   padding:9px!important;
+ }
+ .deal img{width:58px!important;height:60px!important}
+ .deal b{font-size:12px!important}
+ .deal small{font-size:8px!important}
+ .deal-price{font-size:16px!important}
+}
+</style>
 </head>
 
 <body>
