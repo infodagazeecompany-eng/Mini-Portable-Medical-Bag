@@ -196,6 +196,17 @@ src="https://www.facebook.com/tr?id=987069024389586&ev=PageView&noscript=1"/></n
  .deal-price{font-size:16px!important}
 }
 </style>
+
+<style>
+#thankyou-page{display:none;min-height:100vh;width:100%;align-items:center;justify-content:center;padding:28px 18px;background:linear-gradient(135deg,#f7fbff,#eef4ff);text-align:center}
+.thankyou-card{width:min(560px,100%);padding:42px 25px;border-radius:28px;background:#fff;border:1px solid #e2e8f2;box-shadow:0 25px 70px rgba(18,43,79,.14)}
+.thankyou-check{width:82px;height:82px;border-radius:50%;display:grid;place-items:center;margin:0 auto 20px;background:#eafaf2;border:1px solid #bfe9d2;color:#16a05a;font-size:44px;font-weight:900}
+.thankyou-card h1{margin:0 0 12px;color:#122b4f;font-size:clamp(32px,6vw,48px);line-height:1.08}
+.thankyou-card p{color:#68778e;font-size:16px;line-height:1.65;margin:0 auto 24px;max-width:460px}
+.thankyou-card a{display:inline-flex;align-items:center;justify-content:center;padding:14px 22px;border-radius:12px;background:#122b4f;color:#fff;text-decoration:none;font-weight:800}
+body.thankyou-mode>header,body.thankyou-mode>main,body.thankyou-mode>footer,body.thankyou-mode>.sticky,body.thankyou-mode>.review-strip,body.thankyou-mode>.order-pop{display:none!important}
+body.thankyou-mode #thankyou-page{display:flex!important}
+</style>
 </head>
 
 <body>
@@ -359,45 +370,27 @@ src="https://www.facebook.com/tr?id=987069024389586&ev=PageView&noscript=1"/></n
       });
     }
 
-    // Existing confirmation + Purchase event behavior preserved.
+    // Keep the existing order submission, pixels and Google Sheet intact.
+    // After the form is submitted to the hidden Google Apps Script iframe,
+    // show a dedicated full-page Thank You screen.
     setTimeout(function () {
-      message.style.display = "block";
-      message.scrollIntoView({ behavior: "smooth", block: "center" });
-      button.textContent = "ORDER PLACED ✓";
-
-      if (typeof fbq === "function") {
-        const selectedDeal = document.querySelector('input[name="deal"]:checked');
-        let purchaseValue = 0;
-        if (selectedDeal) {
-          if (selectedDeal.value.includes("1,500")) purchaseValue = 1500;
-          else if (selectedDeal.value.includes("2,000")) purchaseValue = 2000;
-          else if (selectedDeal.value.includes("2,500")) purchaseValue = 2500;
-        }
-        fbq("track", "Purchase", {
-          value: purchaseValue,
-          currency: "PKR",
-          content_name: "Mini Portable Medical Bag",
-          content_type: "product"
-        });
-      }
-
-      setTimeout(function () {
-        form.reset();
-        const defaultDeal = document.querySelector('input[name="deal"][value="Pack of 1 - Rs. 1,500 + Free Delivery"]');
-        if (defaultDeal) {
-          defaultDeal.checked = true;
-          dealCards.forEach(function(c) { c.classList.remove("active"); });
-          defaultDeal.closest(".deal").classList.add("active");
-        }
-        if (price) price.value = "1500";
-        message.style.display = "none";
-        button.disabled = false;
-        button.textContent = "PLACE ORDER — RS. 1,500 →";
-        if (sticky) sticky.textContent = "🛒 ORDER NOW — RS. 1,500";
-      }, 5000);
+      window.location.href = window.location.pathname + "?thank_you=1";
     }, 1500);
   });
 })();
+</script>
+
+<section id="thankyou-page" aria-live="polite">
+ <div class="thankyou-card">
+  <div class="thankyou-check">✓</div>
+  <h1>Order Placed Successfully!</h1>
+  <p>Aap ka order successfully receive ho gaya hai. Hamari team aap se confirmation ke liye contact karegi.</p>
+  <p style="font-size:13px;color:#8a97aa;margin-top:-10px;">Please dobara order submit na karein.</p>
+  <a href="?">Back to Website</a>
+ </div>
+</section>
+<script>
+(function(){if(new URLSearchParams(window.location.search).get('thank_you')==='1'){document.body.classList.add('thankyou-mode');document.title='Order Placed Successfully';}})();
 </script>
 </body>
 </html>
