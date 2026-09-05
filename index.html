@@ -206,8 +206,9 @@ src="https://www.facebook.com/tr?id=987069024389586&ev=PageView&noscript=1"/></n
 #thankyou-page p{margin:0 auto 10px;color:#607895;font-size:15px;line-height:1.65;max-width:390px}
 #thankyou-page .ty-note{font-size:12px;color:#8b9bb0;margin-top:16px}
 #thankyou-page .ty-btn{display:inline-block;margin-top:18px;padding:13px 24px;border-radius:12px;background:#12375e;color:#fff;text-decoration:none;font-weight:800;font-size:14px}
-body.thankyou-mode>header,body.thankyou-mode>main,body.thankyou-mode>footer,body.thankyou-mode>.sticky,body.thankyou-mode>.review-strip,body.thankyou-mode>.order-pop{display:none!important}
-body.thankyou-mode #thankyou-page{display:flex!important}
+body.thankyou-mode{margin:0!important;min-height:100vh!important;background:#f4f9ff!important}
+body.thankyou-mode> *:not(#thankyou-page){display:none!important}
+body.thankyou-mode #thankyou-page{display:flex!important;min-height:100vh!important;width:100%!important}
 </style>
 </head>
 
