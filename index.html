@@ -340,9 +340,23 @@ body.thankyou-mode #thankyou-page{display:flex!important;min-height:100vh!import
 
 <script>
 (function(){
-  if(new URLSearchParams(window.location.search).get('thank_you')==='1'){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('thank_you')==='1'){
     document.body.classList.add('thankyou-mode');
     document.title='Order Placed Successfully';
+
+    // Meta Ads: count a Purchase only on the real Thank You screen.
+    // sessionStorage prevents duplicate Purchase events if the Thank You page is refreshed.
+    if (typeof fbq === 'function' && !sessionStorage.getItem('medical_bag_purchase_fired')) {
+      const value = Number(params.get('value')) || 1500;
+      fbq('track', 'Purchase', {
+        value: value,
+        currency: 'PKR',
+        content_name: 'Mini Portable Medical Bag',
+        content_type: 'product'
+      });
+      sessionStorage.setItem('medical_bag_purchase_fired', '1');
+    }
   }
 })();
 </script>
@@ -396,7 +410,8 @@ body.thankyou-mode #thankyou-page{display:flex!important;min-height:100vh!import
     // Keep the existing order submission, pixels and Google Sheet intact.
     // After submission, switch to the Thank You screen inside this SAME HTML file.
     setTimeout(function () {
-      window.location.href = window.location.pathname + "?thank_you=1";
+      const selectedValue = Number(price.value) || 1500;
+      window.location.href = window.location.pathname + "?thank_you=1&value=" + encodeURIComponent(selectedValue);
     }, 1500);
   });
 })();
