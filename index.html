@@ -370,6 +370,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       });
       sessionStorage.setItem('medical_bag_purchase_fired', '1');
     }
+
+    // TikTok Ads: count the order only on the real Thank You screen.
+    // sessionStorage prevents duplicate PlaceAnOrder events on refresh.
+    if (typeof ttq !== 'undefined' && !sessionStorage.getItem('medical_bag_tiktok_order_fired')) {
+      const value = Number(params.get('value')) || 1500;
+      ttq.track('PlaceAnOrder', {
+        value: value,
+        currency: 'PKR',
+        content_name: 'Mini Portable Medical Bag',
+        content_type: 'product',
+        quantity: 1
+      });
+      sessionStorage.setItem('medical_bag_tiktok_order_fired', '1');
+    }
   }
 })();
 </script>
