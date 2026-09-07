@@ -434,12 +434,28 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       });
     }
 
-    // Keep the existing order submission, pixels and Google Sheet intact.
-    // After submission, switch to the Thank You screen inside this SAME HTML file.
-    setTimeout(function () {
+    // Wait for the Google Apps Script submission response before showing Thank You.
+    // This prevents Meta/TikTok Purchase/PlaceAnOrder from firing just because
+    // a fixed timer finished while the Sheet submission may still be pending.
+    const submitFrame = document.getElementById("orderSubmitFrame");
+    let completed = false;
+
+    function goToThankYou() {
+      if (completed) return;
+      completed = true;
       const selectedValue = Number(price.value) || 1500;
       window.location.href = window.location.pathname + "?thank_you=1&value=" + encodeURIComponent(selectedValue);
-    }, 1500);
+    }
+
+    if (submitFrame) {
+      submitFrame.addEventListener("load", function () {
+        // Apps Script has returned a response to the submitted form.
+        setTimeout(goToThankYou, 250);
+      }, { once: true });
+    } else {
+      // Safe fallback if the hidden submit iframe is ever removed.
+      setTimeout(goToThankYou, 4000);
+    }
   });
 })();
 </script>
