@@ -133,23 +133,6 @@ footer b{font-size:14px}footer p{font-size:8px;color:#b8c3d3;margin:5px 0 0}
  .sticky a{display:block;text-decoration:none;text-align:center;background:linear-gradient(100deg,#ed3154,#ca2048);color:#fff;padding:12px;border-radius:10px;font-size:12px;font-weight:950}
 }
 </style>
-
-<!-- Existing Meta Pixel preserved exactly -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '987069024389586');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=987069024389586&ev=PageView&noscript=1"/></noscript>
-
 <style id="deal-fix">
 /* Deal selector: clean 3-card layout, one custom radio only */
 .deals{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
@@ -210,19 +193,24 @@ body.thankyou-mode{margin:0!important;min-height:100vh!important;background:#f4f
 body.thankyou-mode> *:not(#thankyou-page){display:none!important}
 body.thankyou-mode #thankyou-page{display:flex!important;min-height:100vh!important;width:100%!important}
 </style>
-<!-- TikTok Pixel Code Start -->
+<!-- Meta Pixel: single clean installation -->
 <script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-
-  ttq.load('DAFALABC77U3EU7G6CQ0');
-  ttq.page();
-}(window, document, 'ttq');
+fbq('init', '987069024389586');
+fbq('track', 'PageView');
 </script>
-<!-- TikTok Pixel Code End -->
+<noscript>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=987069024389586&ev=PageView&noscript=1"/>
+</noscript>
+
 </head>
 
 <body>
@@ -362,13 +350,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     // sessionStorage prevents duplicate Purchase events if the Thank You page is refreshed.
     if (typeof fbq === 'function' && !sessionStorage.getItem('medical_bag_purchase_fired')) {
       const value = Number(params.get('value')) || 1500;
-      fbq('track', 'Purchase', {
-        value: value,
-        currency: 'PKR',
-        content_name: 'Mini Portable Medical Bag',
-        content_type: 'product'
-      });
-      sessionStorage.setItem('medical_bag_purchase_fired', '1');
+sessionStorage.setItem('medical_bag_purchase_fired', '1');
     }
 
     // TikTok Ads: count the order only on the real Thank You screen.
@@ -457,6 +439,33 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       setTimeout(goToThankYou, 4000);
     }
   });
+})();
+</script>
+
+
+<script>
+/* Meta Purchase: fires ONLY after this page enters the existing Thank You state. */
+(function () {
+  var purchaseSent = false;
+
+  function trackRealPurchase() {
+    if (purchaseSent) return;
+    if (!document.body.classList.contains('thankyou-mode')) return;
+    if (typeof window.fbq !== 'function') return;
+
+    purchaseSent = true;
+    window.fbq('track', 'Purchase', {
+      value: 1500,
+      currency: 'PKR'
+    });
+  }
+
+  // Watch for the site's existing Thank You page state.
+  var observer = new MutationObserver(trackRealPurchase);
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+  // Also catch it immediately if the page loads already in Thank You state.
+  trackRealPurchase();
 })();
 </script>
 
