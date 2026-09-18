@@ -400,10 +400,20 @@ sessionStorage.setItem('medical_bag_purchase_fired', '1');
       const radio = card.querySelector('input[name="deal"]');
       if (radio) radio.checked = true;
 
-      let value = 999;
-      if (radio && radio.value.includes("1,299")) value = 1499;
-      if (radio && radio.value.includes("1,799")) value = 1999;
+      let subtotal = 799;
+      if (radio && radio.value.includes("1,299")) subtotal = 1299;
+      if (radio && radio.value.includes("1,799")) subtotal = 1799;
+
+      const delivery = 200;
+      const value = subtotal + delivery;
+
       price.value = value;
+
+      const summarySubtotal = document.getElementById("summarySubtotal");
+      const summaryTotal = document.getElementById("summaryTotal");
+      if (summarySubtotal) summarySubtotal.textContent = "Rs. " + subtotal.toLocaleString();
+      if (summaryTotal) summaryTotal.textContent = "Rs. " + value.toLocaleString();
+
       button.textContent = "PLACE ORDER — RS. " + value.toLocaleString() + " →";
       if (sticky) sticky.textContent = "🛒 ORDER NOW — RS. " + value.toLocaleString();
     });
